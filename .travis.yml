@@ -1,4 +1,6 @@
 sudo: required
+language: generic
+
 services:
   - docker
 
@@ -6,27 +8,26 @@ before_install:
   - docker build -t ayonchakraborty/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true ayonchakraborty/react-test npm test -- --coverage
+  - docker run -e CI=true ayonchakraborty/react-test npm test
 
 after_success:
-  - docker build -t ayonchakraborty/multi-client ./client 
-  - docker build -t ayonchakraborty/multi-nginx ./nginx
-  - docker build -t ayonchakraborty/multi-server ./server
-  - docker build -t ayonchakraborty/multi-worker ./worker
-  #Log in to docker CLI
+  - docker build -t ayonchakraborty/multi-client-10-14 ./client
+  - docker build -t ayonchakraborty/multi-nginx-10-14 ./nginx
+  - docker build -t ayonchakraborty/multi-server-10-14 ./server
+  - docker build -t ayonchakraborty/multi-worker-10-14 ./worker
+  # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  #Take Images and move to Docker Hub
-  - docker push ayonchakraborty/multi-client
-  - docker push ayonchakraborty/multi-nginx
-  - docker push ayonchakraborty/multi-server
-  - docker push ayonchakraborty/multi-worker
+  # Take those images and push them to docker hub
+  - docker push ayonchakraborty/multi-client-10-14
+  - docker push ayonchakraborty/multi-nginx-10-14
+  - docker push ayonchakraborty/multi-server-10-14
+  - docker push ayonchakraborty/multi-worker-10-14
 
-  
 deploy:
   provider: elasticbeanstalk
   region: 'us-east-1'
   app: 'multi-docker'
-  env: 'MultiDocker-env-1'
+  env: 'MultiDocker-env'
   bucket_name: 'elasticbeanstalk-us-east-1-561940848076'
   bucket_path: 'docker-multi'
   on:

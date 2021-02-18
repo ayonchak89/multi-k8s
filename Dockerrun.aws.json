@@ -1,0 +1,37 @@
+{
+    "AESEBDockerrunVersion": 2,
+    "containderDefinitions": [
+        {
+            "name": "client",
+            "image": "ayonchakraborty/multi-client",
+            "hostname": "client",
+            "essential": false
+        },
+        {
+            "name": "server",
+            "image": "ayonchakraborty/multi-server",
+            "hostname": "api",
+            "essential": false
+        },
+        {
+            "name": "worker",
+            "image": "ayonchakraborty/multi-worker",
+            "hostname": "worker",
+            "essential": false
+        },
+        {
+            "name": "nginx",
+            "image": "ayonchakraborty/multi-nginx",
+            "hostname": "client",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ],
+            "links" :["client", "server"]
+
+        }
+    ]
+}

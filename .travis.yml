@@ -21,6 +21,7 @@ after_success:
   - docker push ayonchakraborty/multi-server
   - docker push ayonchakraborty/multi-worker
 
+  
 deploy:
   provider: elasticbeanstalk
   region: 'us-east-1'
